@@ -1,21 +1,26 @@
 name: Simple CI with Security Scan
+
 on:
- push:
- branches: [ main ]
+  push:
+    branches: [ main ]
+
 jobs:
- build-and-scan:
- runs-on: ubuntu-latest
- steps:
- - name: Checkout code
- uses: actions/checkout@v3
- - name: Set up Docker
- uses: docker/setup-buildx-action@v3
- - name: Build Docker image
- run: docker build -t myapp:latest .
- - name: Run Trivy vulnerability scanner
- uses: aquasecurity/trivy-action@master
- with:
- image-ref: 'myapp:latest'
- format: 'table'
- ignore-unfixed: true
- severity: 'CRITICAL,HIGH'
+  build-and-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker build -t myapp:latest .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'myapp:latest'
+          format: 'table'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
